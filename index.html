@@ -1,0 +1,654 @@
+<!-- index.html - Hii ndiyo itakuwa app yako -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SILA MOVIES</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0A0F1E;
+            color: white;
+        }
+        
+        /* Header */
+        .header {
+            background: #0A0F1E;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2A2F3E;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .logo {
+            color: #0066FF;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header-icons span {
+            font-size: 24px;
+        }
+        
+        /* Main Content */
+        .container {
+            padding: 80px 15px 70px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+            color: white;
+        }
+        
+        /* Movie Scroll */
+        .movie-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 5px 0;
+            scrollbar-width: none;
+        }
+        
+        .movie-row::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .movie-card {
+            min-width: 120px;
+        }
+        
+        .movie-poster {
+            width: 120px;
+            height: 180px;
+            background: #1A1F2E;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .movie-title {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 2px;
+        }
+        
+        .movie-year {
+            font-size: 12px;
+            color: #8899AA;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #1A1F2E;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #2A2F3E;
+        }
+        
+        .nav-item {
+            text-align: center;
+            color: #8899AA;
+        }
+        
+        .nav-item.active {
+            color: #0066FF;
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+        }
+        
+        .nav-text {
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        
+        /* Movie Detail Page */
+        .detail-backdrop {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .backdrop-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(transparent, #0A0F1E);
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 40px;
+            left: 15px;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .detail-content {
+            padding: 20px 15px;
+            margin-top: -50px;
+        }
+        
+        .detail-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .detail-meta {
+            display: flex;
+            gap: 15px;
+            color: #8899AA;
+            margin-bottom: 15px;
+        }
+        
+        .genre-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .genre-tag {
+            background: #1A1F2E;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .description {
+            color: #8899AA;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .play-btn, .download-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .play-btn {
+            background: #0066FF;
+            color: white;
+        }
+        
+        .download-btn {
+            background: #1A1F2E;
+            color: white;
+        }
+        
+        /* Search Page */
+        .search-box {
+            background: #1A1F2E;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .search-box input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            margin-left: 10px;
+            outline: none;
+        }
+        
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .search-item img {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        /* AI Chat */
+        .chat-container {
+            padding: 15px;
+            height: calc(100vh - 130px);
+            overflow-y: auto;
+        }
+        
+        .chat-message {
+            max-width: 80%;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .user-message {
+            background: #0066FF;
+            margin-left: auto;
+        }
+        
+        .ai-message {
+            background: #1A1F2E;
+        }
+        
+        .chat-input-area {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: #1A1F2E;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: #0A0F1E;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            color: white;
+            outline: none;
+        }
+        
+        .send-btn {
+            background: #0066FF;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- App Content -->
+    <div id="app">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">SILA MOVIES</div>
+            <div class="header-icons">
+                <span onclick="showPage('search')">🔍</span>
+                <span onclick="showPage('profile')">👤</span>
+            </div>
+        </div>
+        
+        <!-- Pages Container -->
+        <div id="home-page" class="container">
+            <div class="section-title">🔥 Trending Movies</div>
+            <div class="movie-row" id="trending-movies"></div>
+            
+            <div class="section-title">🆕 New Movies</div>
+            <div class="movie-row" id="new-movies"></div>
+            
+            <div class="section-title">⭐ Popular</div>
+            <div class="movie-row" id="popular-movies"></div>
+            
+            <div class="section-title">📺 Live TV</div>
+            <div class="movie-row" id="live-tv"></div>
+        </div>
+        
+        <div id="movie-detail-page" class="hidden">
+            <div class="detail-backdrop" id="detail-backdrop">
+                <div class="backdrop-overlay"></div>
+                <div class="back-button" onclick="showPage('home')">←</div>
+            </div>
+            <div class="detail-content">
+                <div class="detail-title" id="detail-title"></div>
+                <div class="detail-meta" id="detail-meta"></div>
+                <div class="genre-tags" id="detail-genres"></div>
+                <div class="description" id="detail-description"></div>
+                <div class="action-buttons">
+                    <button class="play-btn" onclick="playMovie()">▶ PLAY</button>
+                    <button class="download-btn" onclick="downloadMovie()">⬇ DOWNLOAD</button>
+                </div>
+                <div class="section-title">🔥 Latest Trending</div>
+                <div class="movie-row" id="related-movies"></div>
+            </div>
+        </div>
+        
+        <div id="search-page" class="container hidden">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search movies..." id="search-input" onkeyup="searchMovies()">
+            </div>
+            <div class="search-grid" id="search-results"></div>
+        </div>
+        
+        <div id="chat-page" class="hidden">
+            <div class="chat-container" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Ask me anything...">
+                <button class="send-btn" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+        
+        <div id="profile-page" class="container hidden">
+            <div style="text-align: center; margin-top: 50px;">
+                <div style="font-size: 80px; color: #0066FF;">👤</div>
+                <h2>Guest User</h2>
+                <p style="color: #8899AA;">Free Plan</p>
+                
+                <div style="display: flex; justify-content: space-around; margin: 30px 0;">
+                    <div>
+                        <div style="font-size: 24px; color: #0066FF;">1500</div>
+                        <div style="color: #8899AA;">Views</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; color: #0066FF;">∞</div>
+                        <div style="color: #8899AA;">Movies</div>
+                    </div>
+                </div>
+                
+                <button style="background: #0066FF; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; margin: 10px 0;">⭐ Upgrade to Premium</button>
+                <button style="background: #1A1F2E; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px;" onclick="clearCache()">🗑 Clear Cache</button>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="showPage('home')">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">Home</div>
+            </div>
+            <div class="nav-item" onclick="showPage('search')">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-text">Search</div>
+            </div>
+            <div class="nav-item" onclick="showPage('chat')">
+                <div class="nav-icon">💬</div>
+                <div class="nav-text">AI</div>
+            </div>
+            <div class="nav-item" onclick="showPage('profile')">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">Profile</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // SAMPLE DATA
+        const movies = [
+            {
+                id: 1,
+                title: "Fast & Furious 10",
+                poster: "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg",
+                year: 2024,
+                rating: 7.8,
+                genre: ["Action", "Thriller"],
+                description: "The final chapter of the Fast & Furious saga.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 2,
+                title: "Oppenheimer",
+                poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg",
+                year: 2023,
+                rating: 8.5,
+                genre: ["Biography", "Drama"],
+                description: "The story of American scientist J. Robert Oppenheimer.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 3,
+                title: "The Batman",
+                poster: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/cgzJPBzj7H1rDGiKyAe6j4ftW8C.jpg",
+                year: 2022,
+                rating: 7.9,
+                genre: ["Action", "Crime"],
+                description: "When the Riddler begins killing Gotham's elite, Batman must uncover the truth.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            }
+        ];
+        
+        let currentMovie = null;
+        let chatHistory = [];
+        
+        // Show different pages
+        function showPage(page) {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('movie-detail-page').classList.add('hidden');
+            document.getElementById('search-page').classList.add('hidden');
+            document.getElementById('chat-page').classList.add('hidden');
+            document.getElementById('profile-page').classList.add('hidden');
+            
+            if (page === 'home') {
+                document.getElementById('home-page').classList.remove('hidden');
+                loadHomePage();
+            } else if (page === 'movie') {
+                document.getElementById('movie-detail-page').classList.remove('hidden');
+            } else if (page === 'search') {
+                document.getElementById('search-page').classList.remove('hidden');
+                document.getElementById('search-input').focus();
+            } else if (page === 'chat') {
+                document.getElementById('chat-page').classList.remove('hidden');
+                loadChatHistory();
+            } else if (page === 'profile') {
+                document.getElementById('profile-page').classList.remove('hidden');
+            }
+            
+            // Update bottom nav
+            document.querySelectorAll('.nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+            });
+            if (page === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
+            if (page === 'search') document.querySelectorAll('.nav-item')[1].classList.add('active');
+            if (page === 'chat') document.querySelectorAll('.nav-item')[2].classList.add('active');
+            if (page === 'profile') document.querySelectorAll('.nav-item')[3].classList.add('active');
+        }
+        
+        // Load home page
+        function loadHomePage() {
+            // Trending
+            let trendingHtml = '';
+            movies.forEach(movie => {
+                trendingHtml += `
+                    <div class="movie-card" onclick="showMovieDetail(${movie.id})">
+                        <div class="movie-poster" style="background-image: url('${movie.poster}')"></div>
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-year">${movie.year} • ⭐ ${movie.rating}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('trending-movies').innerHTML = trendingHtml;
+            document.getElementById('new-movies').innerHTML = trendingHtml;
+            document.getElementById('popular-movies').innerHTML = trendingHtml;
+            
+            // Live TV
+            document.getElementById('live-tv').innerHTML = `
+                <div class="movie-card">
+                    <div class="movie-poster" style="background: #0066FF; display: flex; align-items: center; justify-content: center; font-size: 40px;">📺</div>
+                    <div class="movie-title">SILA TV</div>
+                    <div class="movie-year" style="color: #FF0000;">🔴 LIVE</div>
+                </div>
+            `;
+        }
+        
+        // Show movie detail
+        function showMovieDetail(id) {
+            currentMovie = movies.find(m => m.id === id);
+            
+            document.getElementById('detail-backdrop').style.backgroundImage = `url('${currentMovie.backdrop}')`;
+            document.getElementById('detail-title').innerHTML = currentMovie.title;
+            document.getElementById('detail-meta').innerHTML = `${currentMovie.year} • ⭐ ${currentMovie.rating}/10 • 2h 15min`;
+            
+            let genresHtml = '';
+            currentMovie.genre.forEach(g => {
+                genresHtml += `<span class="genre-tag">${g}</span>`;
+            });
+            document.getElementById('detail-genres').innerHTML = genresHtml;
+            document.getElementById('detail-description').innerHTML = currentMovie.description;
+            
+            // Related movies
+            let relatedHtml = '';
+            movies.filter(m => m.id !== id).forEach(movie => {
+                relatedHtml += `
+                    <div class="movie-card" onclick="showMovieDetail(${movie.id})">
+                        <div class="movie-poster" style="background-image: url('${movie.poster}')"></div>
+                        <div class="movie-title">${movie.title}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('related-movies').innerHTML = relatedHtml;
+            
+            showPage('movie');
+        }
+        
+        // Play movie
+        function playMovie() {
+            if (currentMovie && currentMovie.videoUrl) {
+                window.open(currentMovie.videoUrl, '_blank');
+            }
+        }
+        
+        // Download movie
+        function downloadMovie() {
+            if (currentMovie && currentMovie.downloadUrl) {
+                window.open(currentMovie.downloadUrl, '_blank');
+            } else {
+                alert('Download link not available');
+            }
+        }
+        
+        // Search movies
+        function searchMovies() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const results = movies.filter(m => m.title.toLowerCase().includes(query));
+            
+            let html = '';
+            results.forEach(movie => {
+                html += `
+                    <div class="search-item" onclick="showMovieDetail(${movie.id})">
+                        <img src="${movie.poster}" alt="${movie.title}">
+                        <div style="margin-top: 5px;">${movie.title}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('search-results').innerHTML = html;
+        }
+        
+        // AI Chat
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            chatHistory.push({ role: 'user', content: message });
+            updateChatDisplay();
+            
+            input.value = '';
+            
+            // Simulate AI response (replace with actual API later)
+            setTimeout(() => {
+                const responses = [
+                    "I can help you find movies! What genre do you like?",
+                    "Have you watched Fast & Furious? It's trending now!",
+                    "You can download movies directly from Google Drive links.",
+                    "SILA MOVIES has the latest 2024 releases!"
+                ];
+                const aiResponse = responses[Math.floor(Math.random() * responses.length)];
+                chatHistory.push({ role: 'ai', content: aiResponse });
+                updateChatDisplay();
+            }, 1000);
+        }
+        
+        function updateChatDisplay() {
+            let html = '';
+            chatHistory.forEach(msg => {
+                html += `
+                    <div class="chat-message ${msg.role === 'user' ? 'user-message' : 'ai-message'}">
+                        ${msg.content}
+                    </div>
+                `;
+            });
+            document.getElementById('chat-messages').innerHTML = html;
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        }
+        
+        function loadChatHistory() {
+            if (chatHistory.length === 0) {
+                chatHistory.push({ role: 'ai', content: 'Hello! I am SILA AI. How can I help you find movies today?' });
+            }
+            updateChatDisplay();
+        }
+        
+        function clearCache() {
+            alert('Cache cleared successfully!');
+        }
+        
+        // Initialize
+        window.onload = () => {
+            loadHomePage();
+            showPage('home');
+        };
+    </script>
+</body>
+</html>
