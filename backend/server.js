@@ -178,7 +178,7 @@ app.post('/api/admin/verify', async (req, res) => {
   const settings = await Setting.findOne();
   
   if (settings && settings.adminPin === pin) {
-    const token = jwt.sign({ role: 'admin' }, 'sila_secret_2026');
+    const token = jwt.sign({ role: 'admin' }, 'sila');
     res.json({ success: true, token });
   } else {
     res.status(401).json({ error: 'Invalid PIN' });
@@ -208,7 +208,7 @@ app.get('/api/admin/stats', async (req, res) => {
 app.post('/api/admin/init', async (req, res) => {
   let settings = await Setting.findOne();
   if (!settings) {
-    settings = new Setting({ adminPin: 'sila0022', adsEnabled: true, subscriptionPrice: 3000 });
+    settings = new Setting({ adminPin: 'sila', adsEnabled: true, subscriptionPrice: 3000 });
     await settings.save();
   }
   res.json({ success: true });
